@@ -11,7 +11,7 @@ Tip: Start with an in-memory implementation, then add file persistence.
 ## Brainstorm
 
 - [ ] Need a menu:
-  - [ ] Add a todo
+  - [x] Add a todo
   - [ ] Delete exisiting
   - [ ] Edit exisiting
   - [ ] Safe exit out of program
