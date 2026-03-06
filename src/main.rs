@@ -79,6 +79,10 @@ fn add_todo(todos: &mut Vec<String>) {
 }
 
 fn display_todos(todos: &[String], clear: bool, delay: bool) {
+    if todos.is_empty() {
+        no_todos();
+        return;
+    }
     if clear {
         clear_console();
     }
