@@ -1,4 +1,6 @@
-use std::io;
+use std::fs::File;
+use std::io::{self, BufRead};
+use std::path::Path;
 
 fn clear_console() {
     print!("\x1B[2J")
@@ -12,6 +14,27 @@ fn clear_delay_message(message: &str, secs: u64) {
     clear_console();
     println!("{}", message);
     sleep(secs);
+}
+
+fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
+where
+    P: AsRef<Path>,
+{
+    let file = File::open(filename)?;
+    Ok(io::BufReader::new(file).lines())
+}
+
+fn get_file_todos() -> Vec<String> {
+    let path = "todos.txt";
+    let mut file_todos: Vec<String> = Vec::new();
+
+    if let Ok(lines) = read_lines(path) {
+        for line in lines.map_while(Result::ok) {
+            file_todos.push(line);
+        }
+    }
+
+    file_todos
 }
 
 fn no_todos() {
@@ -87,7 +110,7 @@ fn display_todos(todos: &[String], clear: bool, delay: bool) {
         clear_console();
     }
     for (i, todo) in todos.iter().enumerate() {
-        println!("{} = {}", i + 1, todo);
+        println!("{}) {}", i + 1, todo);
     }
     if delay {
         sleep(5);
@@ -116,7 +139,7 @@ fn delete_todo(todos: &mut Vec<String>) {
 }
 
 fn program_loop() {
-    let mut todos: Vec<String> = Vec::new();
+    let mut todos: Vec<String> = get_file_todos();
 
     loop {
         let user_input = menu_selection();
@@ -131,12 +154,7 @@ fn program_loop() {
                 break;
             }
             _ => {
-                clear_console();
-                println!(
-                    "You entered \" {} \"\nThis is not a valid option!",
-                    user_input
-                );
-                sleep(2);
+                clear_delay_message("You entered \" {} \"\nThis is not a valid option!", 2);
                 continue;
             }
         }

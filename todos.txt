@@ -1,0 +1,5 @@
+laundry
+dishes
+trash
+clean bathroom
+homework
