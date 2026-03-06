@@ -97,20 +97,22 @@ fn display_todos(todos: &[String], clear: bool, delay: bool) {
 fn edit_todo(todos: &mut [String]) {
     if todos.is_empty() {
         no_todos();
-    } else {
-        let idx = get_valid_idx(todos, "edit");
-        let edit_todo = get_todo("Edit Complete!");
-        todos[idx] = edit_todo;
+        return;
     }
+
+    let idx = get_valid_idx(todos, "edit");
+    let edit_todo = get_todo("Edit Complete!");
+    todos[idx] = edit_todo;
 }
 
 fn delete_todo(todos: &mut Vec<String>) {
     if todos.is_empty() {
         no_todos();
-    } else {
-        let idx = get_valid_idx(todos, "delete");
-        todos.remove(idx);
+        return;
     }
+
+    let idx = get_valid_idx(todos, "delete");
+    todos.remove(idx);
 }
 
 fn program_loop() {
