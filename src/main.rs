@@ -38,7 +38,7 @@ fn get_file_todos() -> Vec<String> {
     file_todos
 }
 
-fn write_file_todos(todos: &str) {
+fn write_file_todos(todos: String) {
     let _ = fs::write(PATH, todos);
 }
 
@@ -169,7 +169,7 @@ fn program_loop() {
             "3" | "delete" | "del" => delete_todo(&mut todos),
             "4" | "display" | "dis" => display_todos(&todos, true, true),
             "5" => {
-                write_file_todos(join_todos(todos));
+                write_file_todos(join_todos(&todos));
                 clear_console();
                 break;
             }

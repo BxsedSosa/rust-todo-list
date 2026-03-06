@@ -1,5 +1,6 @@
-laundry
-dishes
+drive
 trash
 clean bathroom
 homework
+draw
+workout
