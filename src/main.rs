@@ -1,6 +1,8 @@
-use std::fs::File;
+use std::fs::{self, File};
 use std::io::{self, BufRead};
 use std::path::Path;
+
+const PATH: &str = "todos.txt";
 
 fn clear_console() {
     print!("\x1B[2J")
@@ -25,16 +27,33 @@ where
 }
 
 fn get_file_todos() -> Vec<String> {
-    let path = "todos.txt";
     let mut file_todos: Vec<String> = Vec::new();
 
-    if let Ok(lines) = read_lines(path) {
+    if let Ok(lines) = read_lines(PATH) {
         for line in lines.map_while(Result::ok) {
             file_todos.push(line);
         }
     }
 
     file_todos
+}
+
+fn write_file_todos(todos: &str) {
+    let _ = fs::write(PATH, todos);
+}
+
+fn join_todos(todos: &[String]) -> String {
+    let mut file_todo_string = String::new();
+    for (i, todo) in todos.iter().enumerate() {
+        if i + 1 == todos.len() {
+            file_todo_string.push_str(todo);
+        } else {
+            file_todo_string.push_str(todo);
+            file_todo_string.push('\n');
+        }
+    }
+
+    file_todo_string
 }
 
 fn no_todos() {
@@ -150,6 +169,7 @@ fn program_loop() {
             "3" | "delete" | "del" => delete_todo(&mut todos),
             "4" | "display" | "dis" => display_todos(&todos, true, true),
             "5" => {
+                write_file_todos(join_todos(todos));
                 clear_console();
                 break;
             }
