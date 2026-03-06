@@ -1,4 +1,4 @@
-use std::{io, vec};
+use std::io;
 
 fn clear_console() {
     print!("\x1B[2J")
@@ -8,16 +8,14 @@ fn sleep(secs: u64) {
     std::thread::sleep(std::time::Duration::from_secs(secs));
 }
 
-fn welcome() {
+fn clear_delay_message(message: &str, secs: u64) {
     clear_console();
-    println!("Welcome to Todo List");
-    sleep(2);
+    println!("{}", message);
+    sleep(secs);
 }
 
 fn no_todos() {
-    clear_console();
-    println!("There is no todos!");
-    sleep(2);
+    clear_delay_message("There is no todos!", 2);
 }
 
 fn menu_selection() -> String {
@@ -140,6 +138,6 @@ fn program_loop() {
 }
 
 fn main() {
-    welcome();
+    clear_delay_message("Welcome to Todo list!", 2);
     program_loop();
 }

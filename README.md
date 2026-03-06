@@ -18,4 +18,6 @@ Tip: Start with an in-memory implementation, then add file persistence.
 
 After base todo works on memory, then start working on implementing file read/write to save the todos
 
-test
+- [ ] read lines from file
+  - [ ] add each line to a vector of todos
+- [ ] On exit overwrite exisiting file of todos
