@@ -26,34 +26,16 @@ fn menu_selection() -> String {
     user_input.trim().to_lowercase()
 }
 
-fn get_new_todo() -> String {
+fn get_todo(first_string: &str) -> String {
     let mut user_input = String::new();
 
     loop {
         clear_console();
-        println!("Enter in new todo:");
+        println!("Enter todo:");
 
         match io::stdin().read_line(&mut user_input) {
             Ok(_) => {
-                println!("New Todo added!");
-                sleep(1);
-                return user_input.trim().to_string();
-            }
-            Err(_) => continue,
-        }
-    }
-}
-
-fn get_edit_todo() -> String {
-    let mut user_input = String::new();
-
-    loop {
-        clear_console();
-        println!("Enter in new todo:");
-
-        match io::stdin().read_line(&mut user_input) {
-            Ok(_) => {
-                println!("Edit complete!");
+                println!("{}", first_string);
                 sleep(1);
                 return user_input.trim().to_string();
             }
@@ -88,7 +70,7 @@ fn get_valid_idx(todos: &[String], option: &str) -> usize {
 }
 
 fn add_todo(todos: &mut Vec<String>) {
-    let new_todo = get_new_todo();
+    let new_todo = get_todo("Added new todo!");
     todos.push(new_todo);
 }
 
@@ -112,7 +94,7 @@ fn edit_todo(todos: &mut [String]) {
         sleep(2);
     } else {
         let idx = get_valid_idx(todos, "edit") - 1;
-        let edit_todo = get_edit_todo();
+        let edit_todo = get_todo("Edit Complete!");
         todos[idx] = edit_todo;
     }
 }
