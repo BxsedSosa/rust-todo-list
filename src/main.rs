@@ -1,4 +1,4 @@
-use std::io;
+use std::{io, vec};
 
 fn clear_console() {
     print!("\x1B[2J")
@@ -62,18 +62,18 @@ fn get_edit_todo() -> String {
     }
 }
 
-fn get_edit_idx(todos: &[String]) -> u32 {
+fn get_valid_idx(todos: &[String], option: &str) -> usize {
     loop {
         let mut user_input = String::new();
 
         display_todos(todos, true, false);
-        println!("Which Todo do you want to edit?:");
+        println!("Which Todo do you want to {}?:", option);
 
         io::stdin().read_line(&mut user_input).expect("Cooked");
 
-        match user_input.trim().parse::<u32>() {
+        match user_input.trim().parse::<usize>() {
             Ok(num) => {
-                if num == 0 || num > todos.len() as u32 {
+                if num == 0 || num > todos.len() {
                     clear_console();
                     println!("{} is not a valid selection!", num);
                     sleep(2);
@@ -111,15 +111,21 @@ fn edit_todo(todos: &mut [String]) {
         println!("There is no todos!");
         sleep(2);
     } else {
-        let idx = get_edit_idx(todos) - 1;
+        let idx = get_valid_idx(todos, "edit") - 1;
         let edit_todo = get_edit_todo();
-        todos[idx as usize] = edit_todo;
+        todos[idx] = edit_todo;
     }
 }
 
-fn delete_todo() {
-    println!("delete");
-    sleep(1);
+fn delete_todo(todos: &mut Vec<String>) {
+    if todos.is_empty() {
+        clear_console();
+        println!("There is no todos!");
+        sleep(2);
+    } else {
+        let idx = get_valid_idx(todos, "delete") - 1;
+        todos.remove(idx);
+    }
 }
 
 fn program_loop() {
@@ -131,7 +137,7 @@ fn program_loop() {
         match user_input.as_str() {
             "1" | "add" | "a" => add_todo(&mut todos),
             "2" | "edit" | "e" => edit_todo(&mut todos),
-            "3" | "delete" | "del" => delete_todo(),
+            "3" | "delete" | "del" => delete_todo(&mut todos),
             "4" | "display" | "dis" => display_todos(&todos, true, true),
             "5" => {
                 clear_console();
