@@ -1,4 +1,4 @@
-use std::{env::join_paths, io};
+use std::io;
 
 fn clear_console() {
     print!("\x1B[2J")
@@ -44,22 +44,79 @@ fn get_new_todo() -> String {
     }
 }
 
+fn get_edit_todo() -> String {
+    let mut user_input = String::new();
+
+    loop {
+        clear_console();
+        println!("Enter in new todo:");
+
+        match io::stdin().read_line(&mut user_input) {
+            Ok(_) => {
+                println!("Edit complete!");
+                sleep(1);
+                return user_input.trim().to_string();
+            }
+            Err(_) => continue,
+        }
+    }
+}
+
+fn get_edit_idx(todos: &[String]) -> u32 {
+    loop {
+        let mut user_input = String::new();
+
+        display_todos(todos, true, false);
+        println!("Which Todo do you want to edit?:");
+
+        io::stdin().read_line(&mut user_input).expect("Cooked");
+
+        match user_input.trim().parse::<u32>() {
+            Ok(num) => {
+                if num == 0 || num > todos.len() as u32 {
+                    clear_console();
+                    println!("{} is not a valid selection!", num);
+                    sleep(2);
+                    continue;
+                } else {
+                    return num;
+                }
+            }
+            Err(_) => continue,
+        }
+    }
+}
+
 fn add_todo(todos: &mut Vec<String>) {
     let new_todo = get_new_todo();
     todos.push(new_todo);
 }
 
-fn display_todos(todos: &Vec<String>) {
-    for todo in todos {
-        println!("{}", todo);
+fn display_todos(todos: &[String], clear: bool, delay: bool) {
+    if clear {
+        clear_console();
     }
-    sleep(5);
+    for (i, todo) in todos.iter().enumerate() {
+        println!("{} = {}", i + 1, todo);
+    }
+
+    if delay {
+        sleep(5);
+    }
 }
 
-fn edit_todo() {
-    println!("edit");
-    sleep(1);
+fn edit_todo(todos: &mut [String]) {
+    if todos.is_empty() {
+        clear_console();
+        println!("There is no todos!");
+        sleep(2);
+    } else {
+        let idx = get_edit_idx(todos) - 1;
+        let edit_todo = get_edit_todo();
+        todos[idx as usize] = edit_todo;
+    }
 }
+
 fn delete_todo() {
     println!("delete");
     sleep(1);
@@ -73,9 +130,9 @@ fn program_loop() {
 
         match user_input.as_str() {
             "1" | "add" | "a" => add_todo(&mut todos),
-            "2" | "edit" | "e" => edit_todo(),
+            "2" | "edit" | "e" => edit_todo(&mut todos),
             "3" | "delete" | "del" => delete_todo(),
-            "4" | "display" | "dis" => display_todos(&todos),
+            "4" | "display" | "dis" => display_todos(&todos, true, true),
             "5" => {
                 clear_console();
                 break;
