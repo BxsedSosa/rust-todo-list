@@ -14,6 +14,12 @@ fn welcome() {
     sleep(2);
 }
 
+fn no_todos() {
+    clear_console();
+    println!("There is no todos!");
+    sleep(2);
+}
+
 fn menu_selection() -> String {
     let mut user_input = String::new();
     clear_console();
@@ -81,7 +87,6 @@ fn display_todos(todos: &[String], clear: bool, delay: bool) {
     for (i, todo) in todos.iter().enumerate() {
         println!("{} = {}", i + 1, todo);
     }
-
     if delay {
         sleep(5);
     }
@@ -89,9 +94,7 @@ fn display_todos(todos: &[String], clear: bool, delay: bool) {
 
 fn edit_todo(todos: &mut [String]) {
     if todos.is_empty() {
-        clear_console();
-        println!("There is no todos!");
-        sleep(2);
+        no_todos();
     } else {
         let idx = get_valid_idx(todos, "edit") - 1;
         let edit_todo = get_todo("Edit Complete!");
@@ -101,9 +104,7 @@ fn edit_todo(todos: &mut [String]) {
 
 fn delete_todo(todos: &mut Vec<String>) {
     if todos.is_empty() {
-        clear_console();
-        println!("There is no todos!");
-        sleep(2);
+        no_todos();
     } else {
         let idx = get_valid_idx(todos, "delete") - 1;
         todos.remove(idx);
