@@ -65,7 +65,7 @@ fn get_valid_idx(todos: &[String], option: &str) -> usize {
                     sleep(2);
                     continue;
                 } else {
-                    return num;
+                    return num - 1;
                 }
             }
             Err(_) => continue,
@@ -94,7 +94,7 @@ fn edit_todo(todos: &mut [String]) {
     if todos.is_empty() {
         no_todos();
     } else {
-        let idx = get_valid_idx(todos, "edit") - 1;
+        let idx = get_valid_idx(todos, "edit");
         let edit_todo = get_todo("Edit Complete!");
         todos[idx] = edit_todo;
     }
@@ -104,7 +104,7 @@ fn delete_todo(todos: &mut Vec<String>) {
     if todos.is_empty() {
         no_todos();
     } else {
-        let idx = get_valid_idx(todos, "delete") - 1;
+        let idx = get_valid_idx(todos, "delete");
         todos.remove(idx);
     }
 }
